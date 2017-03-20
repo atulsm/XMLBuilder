@@ -31,33 +31,28 @@ public class TestXMLBuilder {
 	 */
 	@Test
 	public void testSimpleXML() throws Exception{
-		XMLBuilder builder = new XMLBuilder();
+		Document doc = new XMLBuilder()
+				.addElement("Root")
+				.addAttribute("param1", "val1")
+				.addAttribute("param2", "val2")		
+					.addElement("ListElement")		
+						.addElement("ListParam")
+						.addAttribute("name", "name1")
+						.addAttribute("value", "val1")
+					.parent()
+						.addElement("ListParam")
+						.addAttribute("name", "name2")
+						.addAttribute("value", "val2")
+					.parent()		
+				.parent()
+					.addElement("Load")
+						.addElement("SubLoad")
+							.addElement("Task")
+							.addAttribute("name", "name2")
+							.addAttribute("value", "val2")
+				.build();
 
-		builder.addElement("Root");
-		builder.addAttribute("param1", "val1");
-		builder.addAttribute("param2", "val2");
-
-		builder.addElement("ListElement");
-
-		builder.addElement("ListParam");
-		builder.addAttribute("name", "name1");
-		builder.addAttribute("value", "val1");
-		builder.parent();
-
-		builder.addElement("ListParam");
-		builder.addAttribute("name", "name2");
-		builder.addAttribute("value", "val2");
-		builder.parent();
-
-		builder.parent();
-		builder.addElement("Load");
-		builder.addElement("SubLoad");
-		builder.addElement("Task");
-		builder.addAttribute("name", "name2");
-		builder.addAttribute("value", "val2");
-		builder.parent();
-
-		String retXml = getXML(builder.build());
+		String retXml = getXML(doc);
 		System.out.println(retXml);
 		
 		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Root param1=\"val1\" param2=\"val2\"><ListElement><ListParam name=\"name1\" value=\"val1\"/><ListParam name=\"name2\" value=\"val2\"/></ListElement><Load><SubLoad><Task name=\"name2\" value=\"val2\"/></SubLoad></Load></Root>";
